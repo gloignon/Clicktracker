@@ -1,0 +1,53 @@
+<!-- [Previous code from <head> and style tags remains unchanged] -->
+
+<body>
+    <div style="text-align: center; margin-bottom: 20px;">
+        Hide Content Using: 
+        <select id="hideMethod" onchange="changeHideMethod()">
+            <option value="blur">Blur</option>
+            <option value="black-box">Black Box</option>
+        </select>
+    </div>
+
+    <div class="container blur" id="contentContainer"></div>
+
+    <button onclick="submitAnswers()">Submit</button>
+
+    <ul id="timestamps"></ul>
+
+    <script>
+        async function loadItems() {
+            try {
+                const response = await fetch('items.txt');
+                const data = await response.json();
+
+                const container = document.getElementById('contentContainer');
+
+                // For simplicity, let's render just the first item
+                const item = data[0];
+
+                container.innerHTML = `
+                    <div class="zone passage" onmouseover="recordTimestamp('passage')">
+                        ${item.passage}
+                    </div>
+                    <div class="zone stem" onmouseover="recordTimestamp('stem')">
+                        ${item.question}
+                    </div>
+                    ${Object.keys(item.options).map(key => `
+                        <div class="zone option" onmouseover="recordTimestamp('option-${key}')">
+                            <input type="radio" name="answer" value="${key}"> ${key}) ${item.options[key]}
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                console.error('Error loading items:', error);
+            }
+        }
+
+        // Call loadItems on page load
+        window.onload = loadItems;
+
+        // [The rest of the JavaScript code (recordTimestamp, changeHideMethod, and submitAnswers functions) remains unchanged]
+    </script>
+</body>
+</html>
