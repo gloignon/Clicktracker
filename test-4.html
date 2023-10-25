@@ -1,14 +1,88 @@
-<!-- [Previous code from <head> and style tag remains unchanged] -->
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Comprehension Demo</title>
+    <style>
+        .container {
+            width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .zone {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            transition: filter 0.3s;
+        }
+        .blur .zone {
+            filter: blur(5px);
+        }
+        .black-box .zone {
+            background-color: black;
+            color: black;
+        }
+        .zone:hover {
+            filter: none;
+            background-color: transparent;
+            color: initial;
+        }
+    </style>
+</head>
 <body>
-    <!-- [Previous code for the switch and container remains unchanged] -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        Hide Content Using: 
+        <select id="hideMethod" onchange="changeHideMethod()">
+            <option value="blur">Blur</option>
+            <option value="black-box">Black Box</option>
+        </select>
+    </div>
+
+    <div class="container blur" id="contentContainer">
+        <div class="zone passage" onmouseover="recordTimestamp('passage')">
+            The fox is a fascinating creature. Found in many parts of the world, it has proven to be a versatile and cunning animal. In some cultures, the fox is celebrated for its intelligence, while in others, it's seen as a sneaky and untrustworthy creature.
+        </div>
+        <div class="zone stem" onmouseover="recordTimestamp('stem')">
+            Which of the following best describes the fox according to the passage?
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-a')">
+            <input type="radio" name="answer" value="a"> a) Untrustworthy
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-b')">
+            <input type="radio" name="answer" value="b"> b) Intelligent
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-c')">
+            <input type="radio" name="answer" value="c"> c) Sneaky
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-d')">
+            <input type="radio" name="answer" value="d"> d) All of the above
+        </div>
+    </div>
 
     <button onclick="submitAnswers()">Submit</button>
 
     <ul id="timestamps"></ul>
 
     <script>
-        // [Previous recordTimestamp and changeHideMethod functions remain unchanged]
+        function recordTimestamp(section) {
+            const timestamp = new Date().toLocaleTimeString();
+            const list = document.getElementById('timestamps');
+            const listItem = document.createElement('li');
+            listItem.textContent = `Hovered over ${section} at ${timestamp}`;
+            list.appendChild(listItem);
+        }
+
+        function changeHideMethod() {
+            const method = document.getElementById('hideMethod').value;
+            const container = document.getElementById('contentContainer');
+
+            if (method === 'blur') {
+                container.className = 'container blur';
+            } else {
+                container.className = 'container black-box';
+            }
+        }
 
         function submitAnswers() {
             // Get the selected answer
