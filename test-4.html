@@ -1,0 +1,47 @@
+<!-- [Previous code from <head> and style tag remains unchanged] -->
+
+<body>
+    <!-- [Previous code for the switch and container remains unchanged] -->
+
+    <button onclick="submitAnswers()">Submit</button>
+
+    <ul id="timestamps"></ul>
+
+    <script>
+        // [Previous recordTimestamp and changeHideMethod functions remain unchanged]
+
+        function submitAnswers() {
+            // Get the selected answer
+            const options = document.getElementsByName('answer');
+            let selectedOption;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].checked) {
+                    selectedOption = options[i].value;
+                    break;
+                }
+            }
+
+            if (!selectedOption) {
+                alert('Please select an answer before submitting.');
+                return;
+            }
+
+            // Get timestamps data
+            const timestampsList = document.getElementById('timestamps');
+            const timestamps = [];
+            for (let i = 0; i < timestampsList.children.length; i++) {
+                timestamps.push(timestampsList.children[i].textContent);
+            }
+
+            // Store data in localStorage
+            const data = {
+                answer: selectedOption,
+                timestamps: timestamps
+            };
+
+            localStorage.setItem('readingComprehensionData', JSON.stringify(data));
+            alert('Data saved successfully!');
+        }
+    </script>
+</body>
+</html>
