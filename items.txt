@@ -1,0 +1,13 @@
+[
+  {
+    "passage": "The fox is a fascinating creature. Found in many parts of the world, it has proven to be a versatile and cunning animal. In some cultures, the fox is celebrated for its intelligence, while in others, it's seen as a sneaky and untrustworthy creature.",
+    "question": "Which of the following best describes the fox according to the passage?",
+    "options": {
+      "a": "Untrustworthy",
+      "b": "Intelligent",
+      "c": "Sneaky",
+      "d": "All of the above"
+    }
+  }
+  // ... more items can be added in a similar format
+]
