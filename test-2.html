@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Comprehension Demo</title>
+    <style>
+        .container {
+            width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .zone {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            filter: blur(5px);
+            transition: filter 0.3s;
+        }
+        .zone:hover {
+            filter: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="zone passage" onmouseover="recordTimestamp('passage')">
+            The fox is a fascinating creature. Found in many parts of the world, it has proven to be a versatile and cunning animal. In some cultures, the fox is celebrated for its intelligence, while in others, it's seen as a sneaky and untrustworthy creature.
+        </div>
+        <div class="zone stem" onmouseover="recordTimestamp('stem')">
+            Which of the following best describes the fox according to the passage?
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-a')">
+            a) Untrustworthy
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-b')">
+            b) Intelligent
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-c')">
+            c) Sneaky
+        </div>
+        <div class="zone option" onmouseover="recordTimestamp('option-d')">
+            d) All of the above
+        </div>
+    </div>
+
+    <ul id="timestamps"></ul>
+
+    <script>
+        function recordTimestamp(section) {
+            const timestamp = new Date().toLocaleTimeString();
+            const list = document.getElementById('timestamps');
+            const listItem = document.createElement('li');
+            listItem.textContent = `Hovered over ${section} at ${timestamp}`;
+            list.appendChild(listItem);
+        }
+    </script>
+</body>
+</html>
