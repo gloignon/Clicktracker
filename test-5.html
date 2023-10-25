@@ -1,4 +1,34 @@
 <!-- [Previous code from <head> and style tags remains unchanged] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Comprehension Demo</title>
+    <style>
+        .container {
+            width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .zone {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            transition: filter 0.3s;
+        }
+        .blur .zone {
+            filter: blur(5px);
+        }
+        .black-box .zone {
+            background-color: black;
+            color: black;
+        }
+        .zone:hover {
+            filter: none;
+            background-color: transparent;
+            color: initial;
+        }
+    </style>
+</head>
 
 <body>
     <div style="text-align: center; margin-bottom: 20px;">
@@ -14,40 +44,92 @@
     <button onclick="submitAnswers()">Submit</button>
 
     <ul id="timestamps"></ul>
+<script>
+async function loadItems() {
+    try {
+        const response = await fetch('items.txt');
+        const data = await response.json();
 
-    <script>
-        async function loadItems() {
-            try {
-                const response = await fetch('items.txt');
-                const data = await response.json();
+        const container = document.getElementById('contentContainer');
 
-                const container = document.getElementById('contentContainer');
+        // For simplicity, let's render just the first item
+        const item = data[0];
 
-                // For simplicity, let's render just the first item
-                const item = data[0];
+        container.innerHTML = `
+            <div class="zone passage" onmouseover="recordTimestamp('passage')">
+                ${item.passage}
+            </div>
+            <div class="zone stem" onmouseover="recordTimestamp('stem')">
+                ${item.question}
+            </div>
+            ${Object.keys(item.options).map(key => `
+                <div class="zone option" onmouseover="recordTimestamp('option-${key}')">
+                    <input type="radio" name="answer" value="${key}"> ${key}) ${item.options[key]}
+                </div>
+            `).join('')}
+        `;
+    } catch (error) {
+        console.error('Error loading items:', error);
+    }
+}
 
-                container.innerHTML = `
-                    <div class="zone passage" onmouseover="recordTimestamp('passage')">
-                        ${item.passage}
-                    </div>
-                    <div class="zone stem" onmouseover="recordTimestamp('stem')">
-                        ${item.question}
-                    </div>
-                    ${Object.keys(item.options).map(key => `
-                        <div class="zone option" onmouseover="recordTimestamp('option-${key}')">
-                            <input type="radio" name="answer" value="${key}"> ${key}) ${item.options[key]}
-                        </div>
-                    `).join('')}
-                `;
-            } catch (error) {
-                console.error('Error loading items:', error);
-            }
+function recordTimestamp(section) {
+    const timestamp = new Date().toLocaleTimeString();
+    const list = document.getElementById('timestamps');
+    const listItem = document.createElement('li');
+    listItem.textContent = `Hovered over ${section} at ${timestamp}`;
+    list.appendChild(listItem);
+}
+
+function changeHideMethod() {
+    const method = document.getElementById('hideMethod').value;
+    const container = document.getElementById('contentContainer');
+
+    if (method === 'blur') {
+        container.className = 'container blur';
+    } else {
+        container.className = 'container black-box';
+    }
+}
+
+function submitAnswers() {
+    // Get the selected answer
+    const options = document.getElementsByName('answer');
+    let selectedOption;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+            selectedOption = options[i].value;
+            break;
         }
+    }
 
-        // Call loadItems on page load
-        window.onload = loadItems;
+    if (!selectedOption) {
+        alert('Please select an answer before submitting.');
+        return;
+    }
 
-        // [The rest of the JavaScript code (recordTimestamp, changeHideMethod, and submitAnswers functions) remains unchanged]
-    </script>
+    // Get timestamps data
+    const timestampsList = document.getElementById('timestamps');
+    const timestamps = [];
+    for (let i = 0; i < timestampsList.children.length; i++) {
+        timestamps.push(timestampsList.children[i].textContent);
+    }
+
+    // Store data in localStorage
+    const data = {
+        answer: selectedOption,
+        timestamps: timestamps
+    };
+
+    localStorage.setItem('readingComprehensionData', JSON.stringify(data));
+    alert('Data saved successfully!');
+}
+
+// Call loadItems on page load
+window.onload = loadItems;
+
+    
+</script>
+    
 </body>
 </html>
